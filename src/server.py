@@ -44,6 +44,8 @@ def take_once(w: dict, n: int):
     k = str(n)
     if k not in w:
         return None
+    if not w[k]:
+        return None
     return w[k].pop(0)
 
 @app.get("/poll", response_class=PlainTextResponse)
