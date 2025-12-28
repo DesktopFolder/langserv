@@ -94,7 +94,7 @@ class WordData(BaseModel):
 
 @app.post("/add")
 async def add_words(word: WordData):
-    lang = detect(word)
+    lang = detect(word.word)
     print('Got language', lang, 'for word', word)
     # now do my own language detection lol
     if any(y.isascii() for y in word.word[0:3]):
