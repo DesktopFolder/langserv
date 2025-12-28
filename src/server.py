@@ -55,6 +55,9 @@ async def get_words():
 
     res: str = ""
 
+    newfr = {}
+    newjp = {}
+
     while LINES > 0:
         fr, jp = take_once(wfr, LOC), take_once(wjp, LOC)
         if fr is None and jp is None:
@@ -64,11 +67,25 @@ async def get_words():
             LINES -= 1
             res += fr
             res += '\n'
+            newfr[str(LOC + 1)] = fr
 
         if jp is not None:
             LINES -= 1
             res += jp
             res += '\n'
+            newjp[str(LOC + 1)] = jp
+
+    for k, v in newfr.items():
+        if k not in wfr:
+            wfr[k] = list()
+        wfr[k].append(v)
+    for k, v in newjp.items():
+        if k not in wjp:
+            wjp[k] = list()
+        wjp[k].append(v)
+
+    write_words("fr", wfr)
+    write_words("jp", wjp)
 
     return res
 
