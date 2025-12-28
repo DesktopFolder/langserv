@@ -77,6 +77,8 @@ async def get_words():
             res += '\n'
             newjp[str(LOC + 1)] = jp
 
+        LOC += 1
+
     for k, v in newfr.items():
         if k not in wfr:
             wfr[k] = list()
@@ -99,7 +101,7 @@ async def add_words(word: WordData):
     lang = detect(word.word)
     print('Got language', lang, 'for word', word)
     # now do my own language detection lol
-    if any(y.isascii() for y in word.word[0:3]):
+    if any((y.isascii() and y != ' ' and y != '=') for y in word.word[0:3]):
         lang = 'fr'
     else:
         lang = 'jp'
