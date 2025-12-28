@@ -1,6 +1,7 @@
 from random import choice
 from fastapi.responses import PlainTextResponse
 
+from pydantic import BaseModel
 from fastapi import (
     FastAPI,
 )
@@ -71,12 +72,15 @@ async def get_words():
 
     return res
 
+class WordData(BaseModel):
+    word: str
+
 @app.post("/add")
-async def add_words(word: str):
+async def add_words(word: WordData):
     lang = detect(word)
     print('Got language', lang, 'for word', word)
     # now do my own language detection lol
-    if any(y.isascii() for y in word[0:3]):
+    if any(y.isascii() for y in word.word[0:3]):
         lang = 'fr'
     else:
         lang = 'jp'
@@ -84,5 +88,5 @@ async def add_words(word: str):
     w = load_words(lang)
     if '0' not in w:
         w['0'] = list()
-    w['0'].append(word)
+    w['0'].append(word.word)
     write_words(lang, w)
